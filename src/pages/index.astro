@@ -1,0 +1,181 @@
+---
+import '../styles/global.css';
+import Icon from '../components/Icon.astro';
+import { client, preset, copy } from '../config/site';
+
+const t = preset.theme, f = preset.fonts;
+const vars = `--bg:${t.bg};--surface:${t.surface};--ink:${t.ink};--muted:${t.muted};--line:${t.line};--accent:${t.accent};--accent-fg:${t.accentFg};--radius:${t.radius};--font-display:'${f.display}';--font-body:'${f.body}';`;
+const title = `${client.businessName} – ${copy.eyebrow}, ${client.city}`;
+const a = client.address;
+const tel = client.phone.replace(/\s/g, '');
+const ld = {
+  '@context': 'https://schema.org', '@type': 'LocalBusiness', name: client.businessName, telephone: tel, email: client.email,
+  address: { '@type': 'PostalAddress', streetAddress: a.street, postalCode: a.postal, addressLocality: a.city, addressCountry: 'PL' },
+  aggregateRating: { '@type': 'AggregateRating', ratingValue: client.rating.value, reviewCount: client.rating.count },
+};
+const nav = [['Usługi', '#uslugi'], ['O nas', '#o-nas'], ['Galeria', '#galeria'], ['Opinie', '#opinie'], ['Kontakt', '#kontakt']];
+const btn = 'inline-flex items-center justify-center gap-2 px-6 py-3.5 font-semibold transition-opacity rounded-[var(--radius)]';
+const initials = (n: string) => n.split(' ').map(s => s[0]).join('').slice(0, 2);
+---
+<!doctype html>
+<html lang="pl" style={vars}>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={copy.heroSub} />
+  <meta name="theme-color" content={t.bg} />
+  <meta property="og:title" content={title} /><meta property="og:description" content={copy.heroSub} /><meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href={`https://fonts.googleapis.com/css2?${f.query}&display=swap`} />
+  <script type="application/ld+json" set:html={JSON.stringify(ld)} />
+</head>
+<body class="antialiased pb-20 md:pb-0">
+
+  <header class="sticky top-0 z-30 border-b border-line bg-bg/90 backdrop-blur">
+    <div class="mx-auto flex h-16 max-w-6xl items-center justify-between px-5">
+      <a href="#" class="font-display text-xl font-bold tracking-tight">{client.businessName}</a>
+      <nav class="hidden gap-7 text-sm text-muted md:flex" aria-label="Nawigacja">
+        {nav.map(([l, h]) => <a href={h} class="hover:text-ink">{l}</a>)}
+      </nav>
+      <div class="flex items-center gap-4">
+        <a href={`tel:${tel}`} class="hidden items-center gap-2 text-sm font-medium lg:flex"><Icon name="phone" class="w-4 h-4 text-accent" />{client.phone}</a>
+        {client.bookingUrl && <a href={client.bookingUrl} target="_blank" rel="noopener" class={`${btn} bg-accent text-accent-fg !px-4 !py-2 text-sm hover:opacity-90`}>{copy.cta}</a>}
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="mx-auto grid max-w-6xl items-center gap-14 px-5 py-16 md:grid-cols-[1.1fr_.9fr] md:py-24">
+      <div class="hero-in space-y-6">
+        <p class="text-sm font-medium text-accent">{copy.eyebrow} w {client.city}</p>
+        <h1 class="text-4xl font-bold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl text-balance">{copy.heroTitle}</h1>
+        <p class="max-w-xl text-lg leading-relaxed text-muted">{copy.heroSub}</p>
+        <div class="flex flex-col gap-3 pt-2 sm:flex-row">
+          {client.bookingUrl && <a href={client.bookingUrl} target="_blank" rel="noopener" class={`${btn} bg-accent text-accent-fg hover:opacity-90`}><Icon name="calendar" />{copy.cta}</a>}
+          <a href={`tel:${tel}`} class={`${btn} border border-line bg-surface hover:border-accent`}><Icon name="phone" />{client.phone}</a>
+        </div>
+        <div class="flex items-center gap-3 pt-2 text-sm text-muted">
+          <span class="flex text-accent">{[1,2,3,4,5].map(() => <Icon name="star" class="w-4 h-4" />)}</span>
+          <span><b class="text-ink">{String(client.rating.value).replace('.', ',')}</b> w Google, {client.rating.count} opinii</span>
+        </div>
+      </div>
+      <div>
+        {client.heroImage
+          ? <img src={client.heroImage} alt={client.businessName} class="aspect-[4/5] w-full object-cover rounded-[var(--radius)]" fetchpriority="high" />
+          : <div class="flex aspect-[4/5] w-full items-center justify-center border border-line bg-surface text-muted rounded-[var(--radius)]"><Icon name="image" class="w-12 h-12 opacity-40" /></div>}
+      </div>
+    </section>
+
+    <section class="border-y border-line bg-surface">
+      <dl class="mx-auto grid max-w-6xl grid-cols-1 divide-y divide-line px-5 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+        {client.stats.map(s => (
+          <div class="py-6 sm:px-8 sm:first:pl-0">
+            <dd class="font-display text-3xl font-bold">{s.value}</dd>
+            <dt class="text-sm text-muted">{s.label}</dt>
+          </div>
+        ))}
+      </dl>
+    </section>
+
+    <section id="uslugi" class="mx-auto max-w-4xl px-5 py-20">
+      <h2 class="text-3xl font-bold tracking-tight sm:text-4xl">{copy.servicesTitle}</h2>
+      <ul class="mt-10 divide-y divide-line border-y border-line">
+        {client.services.map(s => (
+          <li class="flex items-baseline justify-between gap-6 py-6">
+            <div>
+              <h3 class="text-xl font-semibold">{s.title}</h3>
+              <p class="mt-1 max-w-md text-muted">{s.desc}</p>
+            </div>
+            <div class="shrink-0 text-right">
+              <div class="font-display text-2xl font-bold text-accent">{s.price}</div>
+              {s.time && <div class="text-sm text-muted">{s.time}</div>}
+            </div>
+          </li>
+        ))}
+      </ul>
+      {client.bookingUrl && <a href={client.bookingUrl} target="_blank" rel="noopener" class={`${btn} mt-8 bg-accent text-accent-fg hover:opacity-90`}>{copy.cta}</a>}
+    </section>
+
+    <section id="o-nas" class="border-t border-line bg-surface">
+      <div class="mx-auto grid max-w-6xl gap-12 px-5 py-20 md:grid-cols-2">
+        <div>
+          <h2 class="text-3xl font-bold tracking-tight sm:text-4xl">{copy.aboutTitle}</h2>
+          <div class="mt-6 max-w-prose space-y-4 text-lg leading-relaxed text-muted">{client.about.map(p => <p>{p}</p>)}</div>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold">{copy.teamTitle}</h3>
+          <ul class="mt-6 grid gap-6 sm:grid-cols-2">
+            {client.team.map(m => (
+              <li>
+                {m.photo
+                  ? <img src={m.photo} alt={m.name} loading="lazy" class="aspect-square w-full object-cover rounded-[var(--radius)]" />
+                  : <div class="flex aspect-square w-full items-center justify-center border border-line bg-bg font-display text-4xl font-bold text-accent rounded-[var(--radius)]">{initials(m.name)}</div>}
+                <div class="mt-3 font-semibold">{m.name}</div>
+                <div class="text-sm text-muted">{m.role}</div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="galeria" class="mx-auto max-w-6xl px-5 py-20">
+      <h2 class="text-3xl font-bold tracking-tight sm:text-4xl">{copy.galleryTitle}</h2>
+      <div class="mt-10 grid auto-rows-[160px] grid-cols-2 gap-3 md:auto-rows-[220px] md:grid-cols-4">
+        {client.gallery.map((g, i) => (
+          <figure class={`overflow-hidden rounded-[var(--radius)] ${i === 0 ? 'col-span-2 row-span-2' : ''}`}>
+            {g.src
+              ? <img src={g.src} alt={g.alt} loading="lazy" class="h-full w-full object-cover" />
+              : <div class="flex h-full w-full items-center justify-center border border-line bg-surface text-muted"><Icon name="image" class="w-8 h-8 opacity-40" /></div>}
+          </figure>
+        ))}
+      </div>
+    </section>
+
+    <section id="opinie" class="border-t border-line bg-surface">
+      <div class="mx-auto max-w-6xl px-5 py-20">
+        <h2 class="text-3xl font-bold tracking-tight sm:text-4xl">{copy.reviewsTitle}</h2>
+        <div class="mt-10 grid gap-10 md:grid-cols-3">
+          {client.reviews.map(r => (
+            <figure>
+              <div class="flex text-accent" role="img" aria-label={`${r.rating} na 5 gwiazdek`}>{Array.from({ length: r.rating }).map(() => <Icon name="star" class="w-4 h-4" />)}</div>
+              <blockquote class="mt-3 text-lg leading-relaxed">„{r.text}”</blockquote>
+              <figcaption class="mt-3 text-sm text-muted">{r.author}</figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section id="kontakt" class="mx-auto grid max-w-6xl gap-10 px-5 py-20 md:grid-cols-2">
+      <div class="space-y-8">
+        <h2 class="text-3xl font-bold tracking-tight sm:text-4xl">Odwiedź nas</h2>
+        <div class="flex gap-4"><Icon name="pin" class="mt-1 h-5 w-5 shrink-0 text-accent" />
+          <div><div class="font-semibold">{a.street}</div><div class="text-muted">{a.postal} {a.city}</div>
+          <a href={client.mapsUrl} target="_blank" rel="noopener" class="mt-1 inline-block text-sm text-accent underline underline-offset-4">Wyznacz trasę</a></div></div>
+        <div class="flex gap-4"><Icon name="clock" class="mt-1 h-5 w-5 shrink-0 text-accent" />
+          <dl class="w-full max-w-sm divide-y divide-line">
+            {client.hours.map(h => <div class="flex justify-between py-2"><dt class="text-muted">{h.day}</dt><dd class="font-medium">{h.time}</dd></div>)}
+          </dl></div>
+        <div class="flex gap-4"><Icon name="phone" class="mt-1 h-5 w-5 shrink-0 text-accent" />
+          <div><a href={`tel:${tel}`} class="font-semibold hover:text-accent">{client.phone}</a><div><a href={`mailto:${client.email}`} class="text-muted hover:text-ink">{client.email}</a></div></div></div>
+      </div>
+      <div class="min-h-[320px] overflow-hidden border border-line bg-surface rounded-[var(--radius)]">
+        {client.mapsEmbed
+          ? <iframe src={client.mapsEmbed} title="Mapa dojazdu" class="h-full min-h-[320px] w-full" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          : <a href={client.mapsUrl} target="_blank" rel="noopener" class="flex h-full min-h-[320px] flex-col items-center justify-center gap-3 text-muted hover:text-ink"><Icon name="pin" class="w-10 h-10 text-accent" />Otwórz w Mapach Google</a>}
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-line py-8 text-center text-sm text-muted">
+    © {new Date().getFullYear()} {client.businessName}, {client.city}
+  </footer>
+
+  <div class="fixed inset-x-0 bottom-0 z-40 grid grid-cols-2 gap-px border-t border-line bg-line md:hidden" style="padding-bottom:env(safe-area-inset-bottom)">
+    <a href={`tel:${tel}`} class="flex items-center justify-center gap-2 bg-surface py-4 font-semibold"><Icon name="phone" class="w-4 h-4" />Zadzwoń</a>
+    <a href={client.bookingUrl || `tel:${tel}`} class="flex items-center justify-center gap-2 bg-accent py-4 font-semibold text-accent-fg"><Icon name="calendar" class="w-4 h-4" />Zarezerwuj</a>
+  </div>
+</body>
+</html>
