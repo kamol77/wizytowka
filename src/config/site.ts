@@ -4,7 +4,7 @@
 // ============================================================
 import { presets, type Preset } from './presets';
 
-export const PRESET: keyof typeof presets = 'barber'; // barber | mechanik | wulkanizator | fizjo | wnetrza
+export const PRESET: keyof typeof presets = 'mechanik'; // barber | mechanik | wulkanizator | fizjo | wnetrza
 
 export const client = {
   businessName: 'Lokalny Ekspert',

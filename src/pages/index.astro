@@ -1,4 +1,5 @@
 ---
+const fontsHref = `https://fonts.googleapis.com/css2?${f.query}&display=swap`;
 import '../styles/global.css';
 import Icon from '../components/Icon.astro';
 import { client, preset, copy } from '../config/site';
@@ -27,8 +28,8 @@ const initials = (n: string) => n.split(' ').map(s => s[0]).join('').slice(0, 2)
   <meta name="theme-color" content={t.bg} />
   <meta property="og:title" content={title} /><meta property="og:description" content={copy.heroSub} /><meta property="og:type" content="website" />
   <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" href={`https://fonts.googleapis.com/css2?${f.query}&display=swap`} />
-  <script type="application/ld+json" set:html={JSON.stringify(ld)} />
+<link rel="preload" as="style" href={fontsHref} onload="this.onload=null;this.rel='stylesheet'" />
+<noscript><link rel="stylesheet" href={fontsHref} /></noscript>  <script type="application/ld+json" set:html={JSON.stringify(ld)} />
 </head>
 <body class="antialiased pb-20 md:pb-0">
 
