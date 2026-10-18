@@ -1,7 +1,8 @@
 ---
 import '../styles/global.css';
 import Icon from '../components/Icon.astro';
-import { client, preset, copy } from '../config/site';
+import { client, preset, copy, data, slug } from '../config/site';
+const isDemo = slug.startsWith('demo');
 
 const t = preset.theme, f = preset.fonts;
 const fontsHref = `https://fonts.googleapis.com/css2?${f.query}&display=swap`;
@@ -26,6 +27,7 @@ const initials = (n: string) => n.split(' ').map(s => s[0]).join('').slice(0, 2)
   <title>{title}</title>
   <meta name="description" content={copy.heroSub} />
   <meta name="theme-color" content={t.bg} />
+  {isDemo && <meta name="robots" content="noindex, nofollow" />}
   <meta property="og:title" content={title} /><meta property="og:description" content={copy.heroSub} /><meta property="og:type" content="website" />
   <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="preload" as="style" href={fontsHref} onload="this.onload=null;this.rel='stylesheet'" />
