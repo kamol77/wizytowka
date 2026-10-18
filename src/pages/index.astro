@@ -1,10 +1,10 @@
 ---
-const fontsHref = `https://fonts.googleapis.com/css2?${f.query}&display=swap`;
 import '../styles/global.css';
 import Icon from '../components/Icon.astro';
 import { client, preset, copy } from '../config/site';
 
 const t = preset.theme, f = preset.fonts;
+const fontsHref = `https://fonts.googleapis.com/css2?${f.query}&display=swap`;
 const vars = `--bg:${t.bg};--surface:${t.surface};--ink:${t.ink};--muted:${t.muted};--line:${t.line};--accent:${t.accent};--accent-fg:${t.accentFg};--radius:${t.radius};--font-display:'${f.display}';--font-body:'${f.body}';`;
 const title = `${client.businessName} – ${copy.eyebrow}, ${client.city}`;
 const a = client.address;
