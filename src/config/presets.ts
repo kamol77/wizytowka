@@ -23,8 +23,8 @@ export type Preset = {
 export const presets: Record<string, Preset> = {
   barber: {
     label: 'Barber',
-    theme: { bg: '#15120f', surface: '#1e1a16', ink: '#f3ece1', muted: '#a89f90', line: '#35302a', accent: '#c9a14a', accentFg: '#17130d', radius: '2px' },
-    fonts: { display: 'Fraunces', body: 'Inter', query: 'family=Fraunces:wght@600;800&family=Inter:wght@400;600' },
+    theme: { bg: '#0b0a08', surface: '#15130f', ink: '#e8dfc8', muted: '#a99a78', line: '#332b1b', accent: '#b8953f', accentFg: '#0b0a08', radius: '2px' },
+    fonts: { display: 'Syne', body: 'Montserrat', query: 'family=Syne:wght@700;800&family=Montserrat:wght@400;500;600;700' },
     layout: { hero: 'split', services: 'list', order: ['stats', 'services', 'about', 'gallery', 'reviews', 'contact'] },
     copy: { eyebrow: 'Barber shop', heroTitle: 'Dobre cięcie. Czysta broda. Bez kolejki w {city}.', heroSub: 'Rezerwujesz termin online, przychodzisz na godzinę i wychodzisz zadbany.', cta: 'Umów wizytę', servicesTitle: 'Cennik', aboutTitle: 'O barberze', teamTitle: 'Barberzy', galleryTitle: 'Nasze prace', reviewsTitle: 'Klienci o nas', processTitle: '' },
     sample: {

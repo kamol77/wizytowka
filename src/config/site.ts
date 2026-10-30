@@ -14,6 +14,7 @@ const defaults = {
   rating: { value: 4.9, count: 126 },
   copy: {} as Partial<Preset['copy']>,
   heroImage: '',
+  hide: [] as string[],
 
   stats: [] as { value: string; label: string }[],
   services: [] as { title: string; desc: string; price: string; time?: string }[],
